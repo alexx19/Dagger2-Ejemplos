@@ -75,4 +75,18 @@ public class PresenterUnitTest {
         verify(mockedView,times(1)).setLastName("Bond007");
         verify(mockedView, never()).showUserNotAvailable();
     }
+
+    @Test
+    public void showErrorMessageWhenUserIsNull()
+    {
+        when(mockedModel.getUser()).thenReturn(null);//retorna null, cuando se llama al metodo getUser().
+        presenter.getCurrentUser();//muestra un mensaje que el usuario es  nulo
+        verify(mockedModel,times(1)).getUser();//se verifica que se llame 1 vez.
+
+
+        verify(mockedView, never()).setFirstName("James007");
+        verify(mockedView, never()).setLastName("Bond007");
+        verify(mockedView, times(1)).showUserNotAvailable();//se llama una vez.
+
+    }
 }
