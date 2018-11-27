@@ -87,6 +87,31 @@ public class PresenterUnitTest {
         verify(mockedView, never()).setFirstName("James007");
         verify(mockedView, never()).setLastName("Bond007");
         verify(mockedView, times(1)).showUserNotAvailable();//se llama una vez.
+    }
+
+    @Test
+    public void createErrorMessageIfAnyFielIsEmpty(){
+        //loginbuttonclick, es donde se realiza la persistencia, para guardar el usuario.
+
+        //primera prueba, colocar firstName vacio.
+        when(mockedView.getFirtName()).thenReturn("");//condicion del campo vacio.
+        presenter.loginButtonClick();
+
+        //validacion de campos vacion, primero el firstName
+        verify(mockedView,times(1)).getFirtName();
+        verify(mockedView,never()).getLasName();
+        verify(mockedView,times(1)).showInputError();
+
+        //validando el campo firstName con valor y el lastName vacio.
+        when(mockedView.getFirtName()).thenReturn("James007");
+        when(mockedView.getLasName()).thenReturn("");
+
+        presenter.loginButtonClick();
+
+        verify(mockedView,times(2)).getFirtName();//el metodo es llamados 2 veces, en la prueba anterior
+        verify(mockedView,times(1)).getLasName();//primera vez que se llama, no paso el test anterior.(test booleano)
+        verify(mockedView,times(2)).showInputError();//metodo llamado en la prueba anterior, por lo que se llama 2 veces.
+
 
     }
 }
