@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_main);
 
         /**
-         * Se injecta la actividad a dagger
+         * Se injecta la actividad a dagger. Se injecta como parte
          */
         ((App)getApplication()).getComponent().inject(this);
 
