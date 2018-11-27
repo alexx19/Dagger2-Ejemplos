@@ -8,6 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
@@ -38,11 +42,11 @@ public class PresenterUnitTest {
         user = new User("James007","Bond007");
 
         //Cuando se llama  al metodo getUser, entonces se retorna el usuario(DATA)
-        when(mockedModel.getUser()).thenReturn(user);
+//        when(mockedModel.getUser()).thenReturn(user);
 
 
-        when(mockedView.getFirtName()).thenReturn("Nombre");
-        when(mockedView.getLasName()).thenReturn("Apellido");
+//        when(mockedView.getFirtName()).thenReturn("Nombre");
+//        when(mockedView.getLasName()).thenReturn("Apellido");
 
         //Validacion del codigo, si el presenter esta implementado corectamente.
         //TODO:No se utiliza dagger.
@@ -53,7 +57,22 @@ public class PresenterUnitTest {
     @Test
     public void noExisteInterectionWithView(){
         presenter.getCurrentUser();
-        verifyZeroInteractions(mockedView);//si, la vista no cambia. va a fallar por mockedModel.getUser().
+//        verifyZeroInteractions(mockedView);//si, la vista no cambia. va a fallar por mockedModel.getUser().
+        verify(mockedView,times(1)).showUserNotAvailable();//la vista se llama 1 vez.
+//        verify(mockedView, never()).showUserNotAvailable();//
     }
 
+    @Test
+    public void loadUserFromTheRepoWhenValidUserIsPresent(){
+        when(mockedModel.getUser()).thenReturn(user);//cuando llamen a getUser, retorna user.
+
+        presenter.getCurrentUser();
+        verify(mockedModel,times(1)).getUser();//se verifica que se llame 1 vez.
+
+
+        //Comprobamos la interactuacion con la vista.
+        verify(mockedView, times(1)).setFirstName("James007");
+        verify(mockedView,times(1)).setLastName("Bond007");
+        verify(mockedView, never()).showUserNotAvailable();
+    }
 }
