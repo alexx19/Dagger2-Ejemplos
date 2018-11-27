@@ -114,4 +114,27 @@ public class PresenterUnitTest {
 
 
     }
+
+
+    @Test
+    public void saveValidUser()
+    {
+        //llamadas a view, firstname
+        when(mockedView.getFirtName()).thenReturn("James");
+        when(mockedView.getLasName()).thenReturn("Bond");
+
+        presenter.loginButtonClick();
+
+        //Llamadas dobles, primero validacion if y luego cuando se guardan. **se realiza al momento de llamar loginButtonClick();
+        verify(mockedView,times(2)).getFirtName();
+        verify(mockedView,times(2)).getLasName();
+
+        //Validamos la persistencia en el repositorio.
+        verify(mockedModel,times(1)).creatUser("James","Bond");//createUser, se valida que sea llamado 1 vez,
+
+
+        //Validamos que el mensaje de Toas es mostrado al usuario, cuando se guarda con exito el usuario.
+        verify(mockedView,times(1)).showUserSave();
+
+    }
 }
