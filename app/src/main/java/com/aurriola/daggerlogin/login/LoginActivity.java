@@ -2,19 +2,32 @@ package com.aurriola.daggerlogin.login;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.aurriola.daggerlogin.R;
+import com.aurriola.daggerlogin.http.TwitchAPI;
+import com.aurriola.daggerlogin.http.twitch.Game;
+import com.aurriola.daggerlogin.http.twitch.Twitch;
 import com.aurriola.daggerlogin.root.App;
 
+import java.util.List;
+
 import javax.inject.Inject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginActivityMVP.View {
     EditText edtxtFirtName, edtxtLastName;
     Button btnLogin;
+
+    @Inject
+    TwitchAPI twitchAPI;
 
     /**
      * Sera gestionada por dagger con @Inject, para injectar el presentador a la vista.
@@ -37,7 +50,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin = findViewById(R.id.btnAccept);
         btnLogin.setOnClickListener(this);
 
+        //Se establece un ejemplo para utilizar la API de twitch con retrofit
+        Call<Twitch> call = twitchAPI.getTopGames("ndq4i8d....");//ID de cliente generado con la api de Twitch.
+        //enqueue: encolar o esperar hasta que llegue la respuesta
+        //bloques async, se encolan las respuestas, en un hilo en segundo plano.
+        call.enqueue(new Callback<Twitch>() {
+            //respuesta.
+            @Override
+            public void onResponse(Call<Twitch> call, Response<Twitch> response) {
+                List<Game> topGame = response.body().getGame();
+                for (Game game: topGame)
+                {
+                    Log.d("TOP GAME", game.getName());
+                }
+            }
 
+            //
+            @Override
+            public void onFailure(Call<Twitch> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     /**
