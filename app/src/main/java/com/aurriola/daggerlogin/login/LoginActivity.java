@@ -26,6 +26,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //el objeto Game, solo sera pasado de un  objeto Twitch a Game.
         //link:http://reactivex.io/documentation/operators/flatmap.html
         //se realiza la lista de juegos a partir del objeto Twitch.
-       twitchAPI.getTopGameObservable(".....").flatMap(new Function<Twitch, Observable<Game>>() {
+       twitchAPI.getTopGameObservable("...").flatMap(new Function<Twitch, Observable<Game>>() {
            @Override
            public Observable<Game> apply(Twitch twitch) {
                return Observable.fromIterable(twitch.getGame());
@@ -94,6 +95,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
            @Override
            public Observable<String> apply(Game game)  {
                return Observable.just(game.getName());
+           }
+       }).filter(new Predicate<String>() {
+
+           @Override
+           public boolean test(String s)  {
+               return s.contains("W")||s.contains("w");
            }
        }).subscribeOn(Schedulers.io())
        .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
