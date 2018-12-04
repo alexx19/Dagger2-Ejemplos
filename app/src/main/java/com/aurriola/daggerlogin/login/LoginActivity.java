@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin.setOnClickListener(this);
 
         //Se establece un ejemplo para utilizar la API de twitch con retrofit
-        //Call<Twitch> call = twitchAPI.getTopGames("ndq4i8d7ixwkx8c7qnjbotlyd5449a");//ID de cliente generado con la api de Twitch.
+        //Call<Twitch> call = twitchAPI.getTopGames("......");//ID de cliente generado con la api de Twitch.
         //enqueue: encolar o esperar hasta que llegue la respuesta
         //bloques async, se encolan las respuestas, en un hilo en segundo plano.
        /* call.enqueue(new Callback<Twitch>() {
