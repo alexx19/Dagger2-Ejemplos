@@ -7,6 +7,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -22,8 +23,8 @@ public class TwitchModule {
         //Creando un objeto para logger los resultados de la consulta.
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         //Registra todas las solicitudes.
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);//recupera de la llamada el objeto json.
-
+//        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);//recupera de la llamada el objeto json.
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
         return new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
@@ -46,6 +47,7 @@ public class TwitchModule {
                 .client(client)
                 //responsable de parcear el objeto de respuesta
                 .addConverterFactory(GsonConverterFactory.create())//convertidor de objetos json a clase java, del modulo.
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Llamadas  a objetos rxjava.
                 .build();
     }
 

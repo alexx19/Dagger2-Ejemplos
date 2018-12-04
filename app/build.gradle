@@ -41,4 +41,12 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     //Logging HTTP
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+
+    //Programacion reactiva con RxJava
+    implementation "io.reactivex.rxjava2:rxjava:2.2.0"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+    //Utilizando adapter retrofit con rxjava2
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retroftVersion"
 }
