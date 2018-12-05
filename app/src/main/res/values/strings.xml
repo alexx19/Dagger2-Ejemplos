@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DaggerLogin</string>
+    <string name="main_activity_main">Dagger2</string>
 </resources>

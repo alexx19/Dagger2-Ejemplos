@@ -1,6 +1,8 @@
 package com.aurriola.daggerlogin.login;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +21,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
+import butterknife.BindDimen;
+import butterknife.BindDrawable;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
@@ -39,6 +45,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @BindView(R.id.btnAccept)
     Button btnLogin;
 
+    @BindString(R.string.main_activity_main)
+    String title;
+    
+    @BindDrawable(R.drawable.ic_launcher_background)
+    Drawable drawable_background;
+    
+    @BindColor(R.color.colorPrimary)
+    ColorStateList colorAccent;
+    //int colorAccent;
+
+    @BindDimen(R.dimen.spacing)
+    float spacing;
+
     @Inject
     TwitchAPI twitchAPI;
 
@@ -54,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+
         /**
          * Se injecta la actividad a dagger. Se injecta como parte
          */
