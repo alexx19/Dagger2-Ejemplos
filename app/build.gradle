@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 ext {
     retroftVersion = '2.4.0'
@@ -49,4 +53,8 @@ dependencies {
 
     //Utilizando adapter retrofit con rxjava2
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retroftVersion"
+
+    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
+
 }

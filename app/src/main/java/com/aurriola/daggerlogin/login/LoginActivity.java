@@ -19,6 +19,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -28,12 +30,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginActivityMVP.View {
-    EditText edtxtFirtName, edtxtLastName;
+    @BindView(R.id.edtxt_firt_name)
+    EditText edtxtFirtName;
+    @BindView(R.id.edtxt_firt_lastname)
+    EditText edtxtLastName;
+    @BindView(R.id.btnAccept)
     Button btnLogin;
 
     @Inject
@@ -50,15 +53,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         /**
          * Se injecta la actividad a dagger. Se injecta como parte
          */
         ((App)getApplication()).getComponent().inject(this);
 
-        edtxtFirtName = findViewById(R.id.edtxt_firt_name);
-        edtxtLastName = findViewById(R.id.edtxt_firt_lastname);
-        btnLogin = findViewById(R.id.btnAccept);
         btnLogin.setOnClickListener(this);
 
         //Se establece un ejemplo para utilizar la API de twitch con retrofit
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //el objeto Game, solo sera pasado de un  objeto Twitch a Game.
         //link:http://reactivex.io/documentation/operators/flatmap.html
         //se realiza la lista de juegos a partir del objeto Twitch.
-       twitchAPI.getTopGameObservable("...").flatMap(new Function<Twitch, Observable<Game>>() {
+       twitchAPI.getTopGameObservable("").flatMap(new Function<Twitch, Observable<Game>>() {
            @Override
            public Observable<Game> apply(Twitch twitch) {
                return Observable.fromIterable(twitch.getGame());
