@@ -26,7 +26,9 @@ import butterknife.BindDimen;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -37,7 +39,13 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginActivityMVP.View {
+public class LoginActivity extends AppCompatActivity implements LoginActivityMVP.View {
+
+
+    //Listados de editext
+    @BindViews({R.id.edtxt_firt_name,R.id.edtxt_firt_lastname})
+    List<EditText> inputs;
+
     @BindView(R.id.edtxt_firt_name)
     EditText edtxtFirtName;
     @BindView(R.id.edtxt_firt_lastname)
@@ -61,6 +69,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Inject
     TwitchAPI twitchAPI;
 
+    //Uso de Disable y Enabled con la libreria ButterKnife
+    static final ButterKnife.Action<View> DISABLE = new ButterKnife.Action<View>() {
+        @Override public void apply(View view, int index) {
+            view.setEnabled(false);
+        }
+    };
+    static final ButterKnife.Setter<View, Boolean> ENABLED = new ButterKnife.Setter<View, Boolean>() {
+        @Override public void set(View view, Boolean value, int index) {
+            view.setEnabled(value);
+        }
+    };
+
+
     /**
      * Sera gestionada por dagger con @Inject, para injectar el presentador a la vista.
      */
@@ -73,14 +94,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        this.setTitle(title);
 
-
+        //Con el listado de editext 'inputs', se puede cambiar el color de fondo, ocultar los elementos en la vista.
+        ButterKnife.apply(inputs,DISABLE);
+        ButterKnife.apply(inputs,ENABLED, true);
+        ButterKnife.apply(inputs,View.ALPHA, 0.1f);//casi invisible.
         /**
          * Se injecta la actividad a dagger. Se injecta como parte
          */
         ((App)getApplication()).getComponent().inject(this);
 
-        btnLogin.setOnClickListener(this);
+//        btnLogin.setOnClickListener(this);
 
         //Se establece un ejemplo para utilizar la API de twitch con retrofit
         //Call<Twitch> call = twitchAPI.getTopGames("......");//ID de cliente generado con la api de Twitch.
@@ -160,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    @Override
+    /*@Override
     public void onClick(View view) {
         switch (view.getId())
         {
@@ -169,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 presenter.loginButtonClick();
                 break;
         }
-    }
+    }*/
 
 
     /**
@@ -212,5 +237,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void setLastName(String lastName) {
         this.edtxtLastName.setText(lastName);
+    }
+
+    @OnClick(R.id.btnAccept)//uso del click con butterknife
+    public void loginClick(Button btnClick)
+    {
+        btnClick.setText("Enviado!!");
+        presenter.loginButtonClick();
     }
 }
